@@ -16,6 +16,7 @@ typedef struct node{
 
 class BinomialHeap {
 private:
+
     node_t* head;
     explicit BinomialHeap() {
         head = nullptr;
@@ -23,6 +24,7 @@ private:
     explicit BinomialHeap(int k) {
         head = nullptr;
     }
+
 public:
     static BinomialHeap* makeHeap(int k);
     static BinomialHeap* makeHeap();
@@ -30,12 +32,12 @@ public:
     node_t* minimum();
     node_t* extractMin();
     BinomialHeap* heapUnion(BinomialHeap* heap);
-    void decreaseKey();
-    void heapDelete();
+    void decreaseKey(node_t* x, int k);
+    void nodeRemove(node_t* h, node_t* node);
     node_t* merge(BinomialHeap* A, BinomialHeap* B);
     void binLink(node_t* y, node_t* z);
+    void heapDelete(node_t* x);
+    node_t* getHead();
 };
-
-
 
 #endif //BINOMIALHEAP_BINOMIALHEAP_H
