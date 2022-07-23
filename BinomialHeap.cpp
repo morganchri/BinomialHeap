@@ -11,7 +11,7 @@ inline BinomialHeap* BinomialHeap::makeHeap() {
 }
 
 inline node_t* BinomialHeap::getHead() {
-    return this->head
+    return this->head;
 }
 
 inline node_t* BinomialHeap::merge(BinomialHeap* A, BinomialHeap* B) {
