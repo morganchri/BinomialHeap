@@ -1,6 +1,7 @@
 #include <cstdlib>
 #include <ctime>
 #include <iostream>
+#include "BinomialHeap.cpp"
 
 using namespace std;
 
@@ -19,6 +20,10 @@ int main() {
 
         cout << array[i] << endl;
     }
-
+    BinomialHeap* heap = heap->makeHeap();
+    for (int i = 0; i < size; ++i) {
+        heap->insert(array[i]);
+    }
+    heap->printHeap();
     return 0;
 }

@@ -28,16 +28,18 @@ private:
 public:
     static BinomialHeap* makeHeap(int k);
     static BinomialHeap* makeHeap();
-    void insert(node_t* x, int k);
+    void insert(int k);
     node_t* minimum();
     node_t* extractMin();
     BinomialHeap* heapUnion(BinomialHeap* heap);
     void decreaseKey(node_t* x, int k);
     void nodeRemove(node_t* h, node_t* node);
-    node_t* merge(BinomialHeap* A, BinomialHeap* B);
+    node_t* merge(node_t* a);
     void binLink(node_t* y, node_t* z);
     void heapDelete(node_t* x);
     node_t* getHead();
+    void printTree(node_t* temp);
+    void printHeap();
 };
 
 #endif //BINOMIALHEAP_BINOMIALHEAP_H

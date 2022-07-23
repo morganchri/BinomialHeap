@@ -9,47 +9,26 @@ inline BinomialHeap* BinomialHeap::makeHeap() {
     auto* heap = new BinomialHeap();
     return heap;
 }
-
 inline node_t* BinomialHeap::getHead() {
     return this->head;
 }
 
-inline node_t* BinomialHeap::merge(BinomialHeap* A, BinomialHeap* B) {
-    if (A->getHead() == nullptr) {
-        return B->getHead();
-    }
-    if (B->getHead() == nullptr) {
-        return A->getHead();
-    }
-    node_t* head;
-    node_t* h1 = A->getHead();
-    node_t* h2 = B->getHead();
-    node_t* tail;
-    if (A->getHead()->degree <= B->getHead()->degree) {
-        head = A->getHead();
-        h1 = h1->sibling;
-    } else {
-        head = B->getHead();
-        h2 = h2->sibling;
-    }
-    tail = head;
-    while (h1 != nullptr && h2 != nullptr) {
-        if (h1->degree <= h2->degree) {
-            tail->sibling = h1;
-            h1 = h1->sibling;
-        } else {
-            tail->sibling = h2;
-            h2 = h2->sibling;
-        }
-        tail = tail->sibling;
-    }
-    tail->sibling = (h1 != nullptr) ? h1:h2;
-    return head;
+inline node_t* BinomialHeap::merge(node_t* a) {
+    node_t* temp = this->head;
+    if (temp->key > a->key)
+        swap(temp, a);
+
+    a->parent = temp;
+    a->sibling = temp->child;
+    temp->child = a;
+    temp->degree++;
+
+    return temp;
 }
 
 inline BinomialHeap* BinomialHeap::heapUnion(BinomialHeap *heap) {
     auto* temp = BinomialHeap::makeHeap();
-    temp->head = merge(this, heap);
+    temp->head = this->merge(heap->getHead());
     if (temp->head == nullptr) {
         return temp;
     }
@@ -76,7 +55,7 @@ inline BinomialHeap* BinomialHeap::heapUnion(BinomialHeap *heap) {
     return temp;
 }
 
-inline void BinomialHeap::insert(node_t* x, int k) {
+inline void BinomialHeap::insert(int k) {
     BinomialHeap* temp = BinomialHeap::makeHeap(k);
     this->heapUnion(temp);
 }
@@ -160,4 +139,25 @@ inline void BinomialHeap::decreaseKey(node_t* x, int k) {
 inline void BinomialHeap::heapDelete(node_t* x) {
     this->decreaseKey(x, -std::numeric_limits<int>::max());
     this->extractMin();
+}
+
+inline void BinomialHeap::printTree(node_t* temp) {
+    while (temp != nullptr) {
+        cout << temp->key << " ";
+        printTree(temp->child);
+        temp = temp->sibling;
+    }
+}
+
+inline void BinomialHeap::printHeap() {
+    node_t* temp = this->head;
+    if (temp == nullptr) {
+        cout << "Empty heap\n";
+        return;
+    }
+    while (temp != nullptr) {
+        cout << "Node: \n" << "\tDegree: " << temp->degree << "\n" << "\tKey:" << temp->key << "\n";
+        printTree(temp);
+        temp = temp->sibling;
+    }
 }
