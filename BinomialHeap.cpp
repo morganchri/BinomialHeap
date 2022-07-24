@@ -1,62 +1,95 @@
+#include <cmath>
 #include "BinomialHeap.h"
 
-inline BinomialHeap* BinomialHeap::makeHeap(int k) {
+inline BinomialHeap* makeHeap(int k) {
     auto* heap = new BinomialHeap(k);
     return heap;
 }
 
-inline BinomialHeap* BinomialHeap::makeHeap() {
+inline BinomialHeap* makeHeap() {
     auto* heap = new BinomialHeap();
     return heap;
 }
+
 inline node_t* BinomialHeap::getHead() {
     return this->head;
 }
 
-inline node_t* BinomialHeap::merge(node_t* a) {
-    node_t* temp = this->head;
-    if (temp->key > a->key)
-        swap(temp, a);
-
-    a->parent = temp;
-    a->sibling = temp->child;
-    temp->child = a;
-    temp->degree++;
-
-    return temp;
+inline void BinomialHeap::setHead(node_t* node) {
+    this->head = node;
 }
 
-inline BinomialHeap* BinomialHeap::heapUnion(BinomialHeap *heap) {
-    auto* temp = BinomialHeap::makeHeap();
-    temp->head = this->merge(heap->getHead());
+inline node_t* BinomialHeap::merge(BinomialHeap* a, BinomialHeap* b) {
+    node_t* temp = new node();
+    node_t* end = temp;
+
+    node_t* l = a->getHead();
+    node_t* r = b->getHead();
+    if (l == nullptr) {
+        return r;
+    }
+    if (r == nullptr) {
+        return l;
+    }
+    while (l != nullptr || r != nullptr) {
+        if (l == nullptr) {
+            end->sibling = r;
+            end = end->sibling;
+            r = r->sibling;
+        } else if (r == nullptr) {
+            end->sibling = l;
+            end = end->sibling;
+            l = l->sibling;
+        } else {
+            if (l->degree < r->degree) {
+                end->sibling = l;
+                end = end->sibling;
+                l = l->sibling;
+            } else {
+                end->sibling = r;
+                end = end->sibling;
+                r = r->sibling;
+            }
+        }
+    }
+    return temp->sibling;
+}
+
+inline void BinomialHeap::heapUnion(BinomialHeap *heap) {
+    auto* temp = makeHeap();
+    temp->head = merge(this, heap);
     if (temp->head == nullptr) {
-        return temp;
+        this->head = nullptr;
+        return;
     }
     node_t* prevX = nullptr;
     node_t* x = temp->head;
     node_t* nextX = x->sibling;
     while (nextX != nullptr) {
-        if ((x->degree != nextX->degree) || (nextX->sibling != nullptr
+        if (x->degree != nextX->degree
+        || (nextX->sibling != nullptr
         && nextX->sibling->degree == x->degree)) {
             prevX = x;
             x = nextX;
         } else if (x->key <= nextX->key) {
             x->sibling = nextX->sibling;
-            binLink(nextX,x);
-        } else if (prevX == nullptr) {
-            temp->head = nextX;
+            binLink(nextX, x);
         } else {
-            prevX->sibling = nextX;
+            if (prevX == nullptr) {
+                temp->head = nextX;
+            } else {
+                prevX->sibling = nextX;
+            }
             binLink(x, nextX);
             x = nextX;
         }
         nextX = x->sibling;
     }
-    return temp;
+    this->head = temp->head;
 }
 
 inline void BinomialHeap::insert(int k) {
-    BinomialHeap* temp = BinomialHeap::makeHeap(k);
+    BinomialHeap* temp = makeHeap(k);
     this->heapUnion(temp);
 }
 
@@ -141,23 +174,28 @@ inline void BinomialHeap::heapDelete(node_t* x) {
     this->extractMin();
 }
 
-inline void BinomialHeap::printTree(node_t* temp) {
-    while (temp != nullptr) {
-        cout << temp->key << " ";
-        printTree(temp->child);
-        temp = temp->sibling;
-    }
-}
-
 inline void BinomialHeap::printHeap() {
-    node_t* temp = this->head;
-    if (temp == nullptr) {
-        cout << "Empty heap\n";
-        return;
-    }
-    while (temp != nullptr) {
-        cout << "Node: \n" << "\tDegree: " << temp->degree << "\n" << "\tKey:" << temp->key << "\n";
-        printTree(temp);
-        temp = temp->sibling;
+    node_t* currPtr = head;
+    while (currPtr != nullptr) {
+        cout<<"B"<<currPtr->degree<<endl;
+        cout<<"There are "<<pow(2, currPtr->degree)<<" nodes in this tree"<<endl;
+        cout<<"The level order traversal is"<<endl;
+        queue<node_t*> q;
+        q.push(currPtr);
+        while (!q.empty()) {
+            node_t* p = q.front();
+            q.pop();
+            cout<<p->key<<" ";
+
+            if (p->child != nullptr) {
+                node_t* tempPtr = p->child;
+                while (tempPtr != nullptr) {
+                    q.push(tempPtr);
+                    tempPtr = tempPtr->sibling;
+                }
+            }
+        }
+        currPtr = currPtr->sibling;
+        cout<<endl<<endl;
     }
 }

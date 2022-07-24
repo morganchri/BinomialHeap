@@ -20,8 +20,8 @@ int main() {
 
         cout << array[i] << endl;
     }
-    BinomialHeap* heap = heap->makeHeap();
-    for (int i = 0; i < size; ++i) {
+    BinomialHeap* heap = makeHeap(array[0]);
+    for (int i = 1; i < size; ++i) {
         heap->insert(array[i]);
     }
     heap->printHeap();
