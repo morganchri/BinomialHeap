@@ -54,6 +54,7 @@ public:
     void printHeap(node_t* h);
     void insert(int k);
     void reverse(node_t* h);
+    node_t* findNode(node_t* h, int k);
 };
 
 static BinomialHeap* makeHeap(int k);

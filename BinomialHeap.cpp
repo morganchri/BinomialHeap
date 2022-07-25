@@ -118,8 +118,7 @@ inline void BinomialHeap::reverse(node_t* h) {
     if (h->sibling != nullptr) {
         reverse(h->sibling);
         (h->sibling)->sibling = h;
-    }
-    else {
+    } else {
         this->head = h;
     }
 }
@@ -150,7 +149,7 @@ inline node_t* BinomialHeap::extractMin() {
     }
     BinomialHeap* H = makeHeap();
     H->head = revChild;
-    this->merge(this, H);
+    this->heapUnion(H);
     return minNode;
 }
 
@@ -171,6 +170,20 @@ inline void BinomialHeap::decreaseKey(node_t* x, int k) {
 inline void BinomialHeap::heapDelete(node_t* x) {
     this->decreaseKey(x, -std::numeric_limits<int>::max());
     this->extractMin();
+}
+
+inline node_t* BinomialHeap::findNode(node_t* h, int k) {
+    if (h == nullptr) {
+        return nullptr;
+    }
+    if (h->key == k) {
+        return h;
+    }
+    node_t* res = findNode(h->child, k);
+    if (res != nullptr) {
+        return res;
+    }
+    return findNode(h->sibling, k);
 }
 
 inline void BinomialHeap::printHeap(node_t* h) {
@@ -197,7 +210,7 @@ inline void BinomialHeap::printHeap(node_t* h) {
     //    currPtr = currPtr->sibling;
     //    cout<<endl<<endl;
     //}
-    while (h) {
+    while (h != nullptr) {
         cout << h->key << " ";
         printHeap(h->child);
         h = h->sibling;
