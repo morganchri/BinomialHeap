@@ -28,7 +28,7 @@ int main() {
         if (x == "Print" || x == "print") {
             heap->printHeap(heap->getHead());
         } else if (x == "Minimum"|| x == "minimum") {
-            cout << heap->minimum()->key;
+            cout << "The value of the minimum node is: " << heap->minimum()->key;
         } else if (x == "extract" || x == "Extract") {
             cout << "Extracting min..." << heap->extractMin()->key;
         } else if (x == "delete" || x == "Delete") {
