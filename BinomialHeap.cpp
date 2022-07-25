@@ -20,7 +20,7 @@ inline void BinomialHeap::setHead(node_t* node) {
 }
 
 inline node_t* BinomialHeap::merge(BinomialHeap* a, BinomialHeap* b) {
-    node_t* temp = new node();
+    auto* temp = new node();
     node_t* end = temp;
 
     node_t* l = a->getHead();
@@ -114,45 +114,44 @@ inline void BinomialHeap::binLink(node_t *y, node_t *z) {
     z->degree = z->degree + 1;
 }
 
-inline void BinomialHeap::nodeRemove(node_t *h, node_t *node) {
-    if (h == this->head) {
-        this->head = head->sibling;
-    } else {
-        node->sibling = h->sibling;
+inline void BinomialHeap::reverse(node_t* h) {
+    if (h->sibling != nullptr) {
+        reverse(h->sibling);
+        (h->sibling)->sibling = h;
     }
-    node_t *new_head = nullptr;
-    node_t *child = head->child;
-    while( child != nullptr )
-    {
-        node_t *next = child->sibling;
-        child->sibling = new_head;
-        child->parent = nullptr;
-        new_head = child;
-        child = next;
+    else {
+        this->head = h;
     }
-
-    BinomialHeap *temp = makeHeap();
-    temp->head = new_head;
-    this->heapUnion(temp);
-    delete(temp);
 }
 
 inline node_t* BinomialHeap::extractMin() {
-    node_t* prev = nullptr;
-    node_t* min = this->head;
-
-    int minKey = this->head->key;
-    node_t* curr = this->head;
-    while (curr->sibling != nullptr) {
-        if (curr->sibling->key < minKey) {
-            minKey = curr->sibling->key;
-            prev = curr;
-            min = curr->sibling;
-        }
-        curr = curr->sibling;
+    node_t* minNode = this->minimum();
+    node_t* prevX = nullptr;
+    node_t* x = this->head;
+    while (x != minNode)
+    {
+        prevX = x;
+        x = x->sibling;
     }
-    nodeRemove(min, prev);
-    return min;
+    if (prevX == nullptr) {
+        this->head = x->sibling;
+    }
+    else {
+        prevX->sibling = x->sibling;
+    }
+    node_t *revChild = nullptr;
+    node_t* curr = minNode->child;
+    while (curr != nullptr)
+    {
+        node_t* next = curr->sibling;
+        curr->sibling = revChild;
+        revChild = curr;
+        curr = next;
+    }
+    BinomialHeap* H = makeHeap();
+    H->head = revChild;
+    this->merge(this, H);
+    return minNode;
 }
 
 inline void BinomialHeap::decreaseKey(node_t* x, int k) {
@@ -174,28 +173,33 @@ inline void BinomialHeap::heapDelete(node_t* x) {
     this->extractMin();
 }
 
-inline void BinomialHeap::printHeap() {
-    node_t* currPtr = head;
-    while (currPtr != nullptr) {
-        cout<<"B"<<currPtr->degree<<endl;
-        cout<<"There are "<<pow(2, currPtr->degree)<<" nodes in this tree"<<endl;
-        cout<<"The level order traversal is"<<endl;
-        queue<node_t*> q;
-        q.push(currPtr);
-        while (!q.empty()) {
-            node_t* p = q.front();
-            q.pop();
-            cout<<p->key<<" ";
+inline void BinomialHeap::printHeap(node_t* h) {
+    //node_t* currPtr = head;
+    //while (currPtr != nullptr) {
+    //    cout<<"B"<<currPtr->degree<<endl;
+    //    cout<<"There are "<<pow(2, currPtr->degree)<<" nodes in this tree"<<endl;
+    //    cout<<"Nodes in this heap"<<endl;
+    //    queue<node_t*> q;
+    //    q.push(currPtr);
+    //    while (!q.empty()) {
+    //        node_t* p = q.front();
+    //        q.pop();
+    //        cout<<p->key<<" ";
 
-            if (p->child != nullptr) {
-                node_t* tempPtr = p->child;
-                while (tempPtr != nullptr) {
-                    q.push(tempPtr);
-                    tempPtr = tempPtr->sibling;
-                }
-            }
-        }
-        currPtr = currPtr->sibling;
-        cout<<endl<<endl;
+    //        if (p->child != nullptr) {
+    //            node_t* tempPtr = p->child;
+    //            while (tempPtr != nullptr) {
+    //                q.push(tempPtr);
+    //                tempPtr = tempPtr->sibling;
+    //            }
+    //        }
+    //    }
+    //    currPtr = currPtr->sibling;
+    //    cout<<endl<<endl;
+    //}
+    while (h) {
+        cout << h->key << " ";
+        printHeap(h->child);
+        h = h->sibling;
     }
 }

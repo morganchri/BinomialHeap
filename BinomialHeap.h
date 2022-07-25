@@ -3,6 +3,7 @@
 #include <iostream>
 #include <limits>
 #include <queue>
+#include <stack>
 
 using namespace std;
 
@@ -50,8 +51,9 @@ public:
     node_t* getHead();
     void setHead(node_t*);
     void printTree(node_t* temp);
-    void printHeap();
+    void printHeap(node_t* h);
     void insert(int k);
+    void reverse(node_t* h);
 };
 
 static BinomialHeap* makeHeap(int k);
