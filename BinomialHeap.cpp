@@ -85,6 +85,7 @@ inline void BinomialHeap::heapUnion(BinomialHeap *heap) {
         nextX = x->sibling;
     }
     this->head = temp->head;
+    this->minNode = this->minimum();
 }
 
 inline void BinomialHeap::insert(int k) {
@@ -164,11 +165,13 @@ inline void BinomialHeap::decreaseKey(node_t* x, int k) {
         y = z;
         z = y->parent;
     }
+    this->minNode = this->minimum();
 }
 
 inline void BinomialHeap::heapDelete(node_t* x) {
     this->decreaseKey(x, -std::numeric_limits<int>::max());
     this->extractMin();
+    this->minNode = this->minimum();
 }
 
 inline node_t* BinomialHeap::findNode(node_t* h, int k) {

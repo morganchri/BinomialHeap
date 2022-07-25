@@ -30,12 +30,15 @@ typedef struct node{
 class BinomialHeap {
 private:
     node_t* head;
+    node_t* minNode;
 public:
     BinomialHeap() {
         head = nullptr;
+        minNode = nullptr;
     }
     BinomialHeap(int k) {
         head = new node(k);
+        minNode = head;
     }
     node_t* minimum();
     node_t* extractMin();
