@@ -1,4 +1,3 @@
-#include <cmath>
 #include "BinomialHeap.h"
 
 inline BinomialHeap* makeHeap(int k) {
@@ -186,33 +185,34 @@ inline node_t* BinomialHeap::findNode(node_t* h, int k) {
     return findNode(h->sibling, k);
 }
 
-inline void BinomialHeap::printHeap(node_t* h) {
-    //node_t* currPtr = head;
-    //while (currPtr != nullptr) {
-    //    cout<<"B"<<currPtr->degree<<endl;
-    //    cout<<"There are "<<pow(2, currPtr->degree)<<" nodes in this tree"<<endl;
-    //    cout<<"Nodes in this heap"<<endl;
-    //    queue<node_t*> q;
-    //    q.push(currPtr);
-    //    while (!q.empty()) {
-    //        node_t* p = q.front();
-    //        q.pop();
-    //        cout<<p->key<<" ";
-
-    //        if (p->child != nullptr) {
-    //            node_t* tempPtr = p->child;
-    //            while (tempPtr != nullptr) {
-    //                q.push(tempPtr);
-    //                tempPtr = tempPtr->sibling;
-    //            }
-    //        }
-    //    }
-    //    currPtr = currPtr->sibling;
-    //    cout<<endl<<endl;
-    //}
-    while (h != nullptr) {
-        cout << h->key << " ";
-        printHeap(h->child);
-        h = h->sibling;
+inline void BinomialHeap::printTree(node_t *temp) {
+    while (temp) {
+        cout << temp->key << " ";
+        printTree(temp->child);
+        temp = temp->sibling;
     }
+}
+
+inline void BinomialHeap::printHeap(node_t* temp) {
+    node_t* p;
+    if (temp == nullptr) {
+        cout << "Empty heap\n";
+        return;
+    }
+    cout << "The root nodes are: \n";
+    p = temp;
+    while (p != nullptr) {
+        cout << "Root: " << p->key << ", Degree: " << p->degree;
+        if (p->child != nullptr) {
+            cout << "\n\tNodes: ";
+            printTree(p->child);
+        } else {
+            cout << " ";
+        }
+        if (p->sibling != nullptr) {
+            cout << "\n";
+        }
+        p = p->sibling;
+    }
+    cout << "\n";
 }

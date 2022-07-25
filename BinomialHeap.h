@@ -2,11 +2,8 @@
 #define BINOMIALHEAP_BINOMIALHEAP_H
 #include <iostream>
 #include <limits>
-#include <queue>
-#include <stack>
 
 using namespace std;
-
 
 typedef struct node{
     int key;
@@ -44,14 +41,13 @@ public:
     node_t* extractMin();
     void heapUnion(BinomialHeap* heap);
     void decreaseKey(node_t* x, int k);
-    void nodeRemove(node_t* h, node_t* node);
     node_t* merge(BinomialHeap* a, BinomialHeap* b);
     void binLink(node_t* y, node_t* z);
     void heapDelete(node_t* x);
     node_t* getHead();
     void setHead(node_t*);
     void printTree(node_t* temp);
-    void printHeap(node_t* h);
+    void printHeap(node_t* temp);
     void insert(int k);
     void reverse(node_t* h);
     node_t* findNode(node_t* h, int k);
