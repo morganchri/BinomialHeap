@@ -44,6 +44,11 @@ int main() {
             cout << "input the new key: ";
             cin >> k;
             heap->decreaseKey(heap->findNode(heap->getHead(), y), k);
+        } else if (x == "insert" || x == "Insert") {
+            int y;
+            cout << "input the key of a node to insert: ";
+            cin >> y;
+            heap->insert(y);
         } else if (x == "Quit" || x == "quit") {
             break;
         } else {

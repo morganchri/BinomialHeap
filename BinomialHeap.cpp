@@ -207,7 +207,7 @@ inline void BinomialHeap::printHeap(node_t* temp) {
     while (p != nullptr) {
         cout << "Root: " << p->key << ", Degree: " << p->degree;
         if (p->child != nullptr) {
-            cout << "\n\tNodes: ";
+            cout << "\n    Nodes: ";
             printTree(p->child);
         } else {
             cout << " ";
